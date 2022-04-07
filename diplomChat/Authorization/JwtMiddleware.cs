@@ -1,4 +1,5 @@
 using diplomChat.Helpers;
+using diplomChat.Services;
 using Microsoft.Extensions.Options;
 
 namespace diplomChat.Authorization;
