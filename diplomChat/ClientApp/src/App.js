@@ -1,22 +1,30 @@
-import React, { Component } from 'react';
-import { Route } from 'react-router';
-import { Layout } from './components/Layout';
-import { Home } from './components/Home';
-import { FetchData } from './components/FetchData';
-import { Counter } from './components/Counter';
+import { Router, Route, Switch, Redirect } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 
-import './custom.css'
+import { authAtom } from '_state';
+import { Nav, Alert, PrivateRoute } from '_components';
+import { history } from '_helpers';
+import { Home } from 'home';
+import { Users } from 'users';
+import { Account } from 'account';
 
-export default class App extends Component {
-  static displayName = App.name;
+export { App };
 
-  render () {
+function App() {
+    const auth = useRecoilValue(authAtom);
+
     return (
-      <Layout>
-        <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
-        <Route path='/fetch-data' component={FetchData} />
-      </Layout>
+        <div className={'app-container' + (auth ? ' bg-light' : '')}>
+            <Router history={history}>
+                <Nav />
+                <Alert />
+                <Switch>
+                    <PrivateRoute exact path="/" component={Home} />
+                    <PrivateRoute path="/users" component={Users} />
+                    <Route path="/account" component={Account} />
+                    <Redirect from="*" to="/" />
+                </Switch>
+            </Router>
+        </div>
     );
-  }
 }
